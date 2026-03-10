@@ -10,6 +10,7 @@ class AColonyNodeVisualActor;
 class AColonyProjectSiteActor;
 class AColonyZoneVisualActor;
 class UColonyHUDWidget;
+class UStaticMesh;
 
 UCLASS()
 class NEURALCOLONY_API AColonyPresentationManager : public AActor
@@ -48,6 +49,10 @@ private:
 
 	UPROPERTY()
 	UColonyHUDWidget* HUDWidget;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "NeuralColony|Assets", meta = (AllowPrivateAccess = "true"))
+	UStaticMesh* GroundPlaneMesh = nullptr;
+
 
 	UPROPERTY(EditAnywhere, Category = "NeuralColony|Layout")
 	FVector NurseryCenter = FVector(-1400.0f, -820.0f, 80.0f);

@@ -9,24 +9,28 @@
 #include "Engine/StaticMeshActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "UObject/ConstructorHelpers.h"
 
 namespace
 {
 	struct FZoneLayout
 	{
-		FName Name;
 		FString Label;
 		FVector Center;
 		FVector Size;
 		FLinearColor Color;
-		int32 Columns;
-		float Spacing;
 	};
 }
 
 AColonyPresentationManager::AColonyPresentationManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> PlaneMeshFinder(TEXT("/Engine/BasicShapes/Plane.Plane"));
+	if (PlaneMeshFinder.Succeeded())
+	{
+		GroundPlaneMesh = PlaneMeshFinder.Object;
+	}
 }
 
 void AColonyPresentationManager::BeginPlay()
@@ -59,10 +63,9 @@ void AColonyPresentationManager::BeginPlay()
 	{
 		UStaticMeshComponent* GroundMesh = Ground->GetStaticMeshComponent();
 		GroundMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-		UStaticMesh* PlaneMesh = Cast<UStaticMesh>(StaticLoadObject(UStaticMesh::StaticClass(), nullptr, TEXT("/Engine/BasicShapes/Plane.Plane")));
-		if (PlaneMesh)
+		if (GroundPlaneMesh)
 		{
-			GroundMesh->SetStaticMesh(PlaneMesh);
+			GroundMesh->SetStaticMesh(GroundPlaneMesh);
 			GroundMesh->SetWorldScale3D(FVector(55.0f, 55.0f, 1.0f));
 			GroundMesh->SetVectorParameterValueOnMaterials(TEXT("Color"), FVector(0.08f, 0.10f, 0.11f));
 		}
@@ -98,11 +101,11 @@ void AColonyPresentationManager::Tick(float DeltaSeconds)
 void AColonyPresentationManager::BuildColonyLayout()
 {
 	const TArray<FZoneLayout> Zones = {
-		{ TEXT("ArchitectCore"), TEXT("Architect Core"), ArchitectCoreCenter, FVector(9.0f, 7.0f, 1.0f), FLinearColor(0.43f, 0.61f, 1.0f), 3, 170.0f },
-		{ TEXT("Nursery"), TEXT("Nursery"), NurseryCenter, FVector(9.0f, 7.0f, 1.0f), FLinearColor(0.98f, 0.83f, 0.39f), 3, 170.0f },
-		{ TEXT("Workshop"), TEXT("Build Workshop"), WorkshopCenter, FVector(11.0f, 8.0f, 1.0f), FLinearColor(0.32f, 0.86f, 0.55f), 4, 180.0f },
-		{ TEXT("Verification"), TEXT("Verification"), VerificationCenter, FVector(10.0f, 7.0f, 1.0f), FLinearColor(0.53f, 0.74f, 1.0f), 3, 170.0f },
-		{ TEXT("Repair"), TEXT("Repair/Debug"), RepairCenter, FVector(10.0f, 7.0f, 1.0f), FLinearColor(1.0f, 0.43f, 0.34f), 3, 170.0f }
+		{ TEXT("Architect Core"), ArchitectCoreCenter, FVector(9.0f, 7.0f, 1.0f), FLinearColor(0.43f, 0.61f, 1.0f) },
+		{ TEXT("Nursery"), NurseryCenter, FVector(9.0f, 7.0f, 1.0f), FLinearColor(0.98f, 0.83f, 0.39f) },
+		{ TEXT("Build Workshop"), WorkshopCenter, FVector(11.0f, 8.0f, 1.0f), FLinearColor(0.32f, 0.86f, 0.55f) },
+		{ TEXT("Verification"), VerificationCenter, FVector(10.0f, 7.0f, 1.0f), FLinearColor(0.53f, 0.74f, 1.0f) },
+		{ TEXT("Repair/Debug"), RepairCenter, FVector(10.0f, 7.0f, 1.0f), FLinearColor(1.0f, 0.43f, 0.34f) }
 	};
 
 	for (const FZoneLayout& Zone : Zones)

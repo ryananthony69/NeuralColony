@@ -83,3 +83,11 @@ Alert list formatting is also improved for quick scanning.
 - add tiny role icons above nodes (architect/builder/verifier/repairer)
 - add short-lived directional “message pulse” markers between speaker/listener nodes
 - add family-tree quick view in inspector (parent names/generation lineage)
+
+
+## Build-discipline hardening pass
+- Added missing explicit include `Components/HorizontalBoxSlot.h` for `UHorizontalBoxSlot` usage in `UColonyHUDWidget`.
+- Removed runtime `StaticLoadObject` mesh lookup from `BeginPlay` in `AColonyPresentationManager` and replaced it with an editor-assignable `GroundPlaneMesh` property.
+- Ground mesh now has constructor-time default assignment (safe `FObjectFinder` usage in constructor only) and runtime null checks.
+- Kept recurring update paths explicit: simulation subsystem tick + presentation manager tick + node actor tick + HUD native tick.
+- Preserved vertical separation between ground and zone floors to avoid coplanar z-fighting regressions.

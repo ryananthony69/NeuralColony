@@ -37,9 +37,3 @@ This milestone implementation is fully local simulation-only:
 - no API keys
 - no cloud services
 - no internet requirement
-
-
-## Camera controls
-- Pan: `W/A/S/D`
-- Zoom: mouse wheel
-- Select node: left mouse click on a node actor

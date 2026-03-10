@@ -1,0 +1,9 @@
+System,Current Placeholder,Target Asset ID,Target Source,Target Imported Path,Replacement Notes
+AColonyNodeVisualActor.Mesh,/Engine/BasicShapes/Sphere,SK_NC_Nodes_Worker_Base,Quaternius Robot Characters,/Game/NeuralColony/Meshes/Characters/Nodes/SK_NC_Nodes_Worker_Base,Replace sphere body with skeletal node mesh via wrapper component
+AColonyNodeVisualActor.BaseRing,/Engine/BasicShapes/Cylinder,SM_NC_Characters_NodeBaseRing,Custom Needed,/Game/NeuralColony/Meshes/Characters/Nodes/SM_NC_Characters_NodeBaseRing,Keep base ring semantic but improve silhouette and material quality
+AColonyProjectSiteActor.SitePad,/Engine/BasicShapes/Cube,SM_NC_ProjectSite_Pad_A,Kenney Prototype Kit,/Game/NeuralColony/Meshes/ProjectSites/SM_NC_ProjectSite_Pad_A,Use modular foundation piece with cleaner edges
+AColonyProjectSiteActor.BuildMass,/Engine/BasicShapes/Cube,SM_NC_ProjectSite_Frame_A,Custom Needed,/Game/NeuralColony/Meshes/ProjectSites/SM_NC_ProjectSite_Frame_A,Swap by stage (Foundation/Frame/Validation)
+AColonyZoneVisualActor.Floor,/Engine/BasicShapes/Plane,SM_NC_Tile_Floor_01,Kenney Prototype Kit,/Game/NeuralColony/Meshes/Environment/Tiles/SM_NC_Tile_Floor_01,Keep zone color instances for readability
+AColonyZoneVisualActor.Border,/Engine/BasicShapes/Cube,SM_NC_ZoneBorder_LowWall_01,Kenney Prototype Kit,/Game/NeuralColony/Meshes/Environment/Walls/SM_NC_ZoneBorder_LowWall_01,Prevent flat debug look; preserve clean top-down lines
+Ground Plane in AColonyPresentationManager,/Engine/BasicShapes/Plane,SM_NC_Ground_Base_01,Kenney Prototype Kit,/Game/NeuralColony/Meshes/Environment/Tiles/SM_NC_Ground_Base_01,Keep low-detail neutral base for contrast
+Communication bubble text only,UTextRender bubble marker,SM_NC_CommBubble_01 + NS_NC_CommPulse_01,Custom Needed + Fab free FX,/Game/NeuralColony/Meshes/Communication + /Game/NeuralColony/FX/Communication,Optional phase 2 replacement that preserves existing text fallback

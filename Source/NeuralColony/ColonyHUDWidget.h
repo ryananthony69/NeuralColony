@@ -7,7 +7,6 @@
 
 class UEditableTextBox;
 class UTextBlock;
-class UScrollBox;
 class UButton;
 class UColonySimulationSubsystem;
 

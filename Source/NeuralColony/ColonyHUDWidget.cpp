@@ -153,7 +153,20 @@ void UColonyHUDWidget::RefreshAll()
 		}
 	}
 
-	TopStatusText->SetText(FText::FromString(FString::Printf(TEXT("Nodes: %d | Active Jobs: %d | Alerts: %d"), Nodes.Num(), RunningCount, Alerts.Num())));
+	int32 BabyCount = 0;
+	int32 ErrorCount = 0;
+	for (const FNodeRecord& Node : Nodes)
+	{
+		if (Node.State == ENodeLifecycleState::Baby)
+		{
+			++BabyCount;
+		}
+		if (Node.State == ENodeLifecycleState::Error)
+		{
+			++ErrorCount;
+		}
+	}
+	TopStatusText->SetText(FText::FromString(FString::Printf(TEXT("Nodes: %d | Running: %d | Babies: %d | Errors: %d | Alerts: %d"), Nodes.Num(), RunningCount, BabyCount, ErrorCount, Alerts.Num())));
 
 	if (!Projects.IsEmpty())
 	{
@@ -164,7 +177,7 @@ void UColonyHUDWidget::RefreshAll()
 	FString AlertLines;
 	for (int32 Index = 0; Index < FMath::Min(8, Alerts.Num()); ++Index)
 	{
-		AlertLines += FString::Printf(TEXT("- %s\n"), *Alerts[Index].Message);
+		AlertLines += FString::Printf(TEXT("[%d] %s\n"), Index + 1, *Alerts[Index].Message);
 	}
 	AlertsText->SetText(FText::FromString(AlertLines));
 

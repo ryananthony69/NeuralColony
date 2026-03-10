@@ -1,62 +1,85 @@
 # DEV_NOTES
 
-## Milestone 1 presentation layer update
-This iteration builds the playable Unreal-side presentation layer on top of the existing local `UColonySimulationSubsystem` mock runtime.
+## Milestone 1 presentation quality upgrade
+This update reworks the previous debug-like presentation into a clearer colony-sim scene with purposeful spatial layout, readable zone hierarchy, and stronger simulation readability.
 
-Everything remains fully local/offline with no backend integration, no cloud dependency, and no API keys.
+The runtime remains fully local and simulation-first:
+- no cloud dependency
+- no API keys
+- no backend integration
 
-## Added gameplay/presentation classes
-- `AColonyGameMode`
-  - Sets `AColonyCameraPawn` and `AColonyPlayerController` as defaults.
-  - Spawns `AColonyPresentationManager` at runtime.
-- `AColonyCameraPawn`
-  - Top-down camera with pan (WASD) and zoom (mouse wheel).
-- `AColonyPlayerController`
-  - Enables mouse cursor + click handling and forwards node selection to HUD inspector state.
-- `AColonyPresentationManager`
-  - Bridge between subsystem data and world/UI.
-  - Spawns simple ground plane, node visual actors, and project site actor.
-  - Keeps visuals synchronized with subsystem data every tick.
-  - Handles node selection and visible conversation bubble updates.
-- `AColonyNodeVisualActor`
-  - World representation of nodes with text labels and conversation bubble text.
-  - Visual state coloring for baby, idle, running, complete, and error.
-- `AColonyProjectSiteActor`
-  - Build-site placeholder with a world progress bar + project label/stage/progress.
-- `UColonyHUDWidget`
-  - Programmatic UMG layout with:
-    - left panel (My Goal, Neural Network Goal, time controls)
-    - top status bar
-    - right persistent inspector
-    - visible alert/event feed
-    - project status summary
-  - Wired directly to `UColonySimulationSubsystem` data and mutators.
+## Major quality improvements
 
-## Config/build changes
-- `NeuralColony.Build.cs`
-  - Adds UMG/Slate dependencies for runtime widget support.
-- `Config/DefaultInput.ini`
-  - Adds axis mappings for camera movement/zoom:
-    - `MoveForward` (W/S)
-    - `MoveRight` (A/D)
-    - `Zoom` (MouseWheelAxis)
-- `Config/DefaultEngine.ini`
-  - Sets `GlobalDefaultGameMode=/Script/NeuralColony.ColonyGameMode`.
+### 1) Intentional colony layout and zone hierarchy
+The world now builds around explicit colony spaces instead of arbitrary row placement:
+- Architect Core
+- Nursery
+- Build Workshop
+- Verification area
+- Repair/Debug area
+- Dedicated build project site lane
 
-## How the Milestone 1 scene now behaves
-1. Launch game/PIE.
-2. Top-down camera is immediately controllable.
-3. Colony nodes appear as simple placeholder actors.
-4. Node labels and bubble text update from simulation state/activity.
-5. Project site shows visible progress/stage.
-6. Alerts feed updates from subsystem events.
-7. Selecting a node updates persistent inspector details.
-8. Goal inputs edit and persist through subsystem SaveGame.
-9. Time controls pause / 1x / 2x / 3x change simulation speed.
+`AColonyPresentationManager` now creates this structure at startup via `BuildColonyLayout`, and each zone is visualized by `AColonyZoneVisualActor` with readable labels, floor tinting, and boundary slabs.
 
-## Extension points for Milestone 2
-- Replace placeholder meshes with authored assets while preserving current data bindings.
-- Add world-space speech bubble widgets with timed fade behavior.
-- Add explicit node movement/meeting logic tied to communication events.
-- Expand inspector with parent lineage traversal view.
-- Move from polling HUD refresh to delegate-driven UI diff updates.
+### 2) Node visuals upgraded for state readability
+`AColonyNodeVisualActor` now has:
+- a body mesh + base ring for stronger silhouette
+- improved color palette per lifecycle state
+- per-state size differences (babies are visibly smaller)
+- interpolated movement (not static teleport-only feel)
+- timed speech bubble text behavior
+- clearer selected highlight behavior
+
+### 3) Purposeful movement and role-based destinations
+Node placement is no longer arbitrary.
+`AColonyPresentationManager::ResolveTargetLocationForNode` routes node targets by state/role, so actors travel through meaningful locations:
+- babies remain in Nursery
+- builders/planners move between workshop and project lane
+- verifiers use verification zone
+- repairers use repair zone
+- architects operate from architect core
+- complete/error states shift to corresponding finishing/repair positions
+
+This creates a clearer “who is doing what” read from top-down.
+
+### 4) Better project/build-site presentation
+`AColonyProjectSiteActor` now represents build progress as:
+- dedicated site pad
+- expanding build mass (construction volume grows over time)
+- horizontal progress bar with fill motion
+- clearer stage/progress text hierarchy
+
+This makes project progression feel like visible construction rather than a single abstract marker.
+
+### 5) Communication readability improved
+Conversation alerts now drive in-world readable behavior:
+- source node bubble: “Passing instruction”
+- destination node bubble: “Instruction received”
+
+This provides clearer causal behavior for message passing in the colony.
+
+### 6) HUD readability tweaks
+`UColonyHUDWidget` top bar now surfaces stronger simulation telemetry:
+- total nodes
+- running nodes
+- baby count
+- error count
+- alert count
+
+Alert list formatting is also improved for quick scanning.
+
+## Files added/updated for this upgrade
+- Added:
+  - `Source/NeuralColony/ColonyZoneVisualActor.h`
+  - `Source/NeuralColony/ColonyZoneVisualActor.cpp`
+- Reworked:
+  - `Source/NeuralColony/ColonyPresentationManager.h/.cpp`
+  - `Source/NeuralColony/ColonyNodeVisualActor.h/.cpp`
+  - `Source/NeuralColony/ColonyProjectSiteActor.h/.cpp`
+  - `Source/NeuralColony/ColonyHUDWidget.cpp`
+
+## Next logical Milestone 1 polish (still local)
+- add subtle lane decals between zones for stronger traffic readability
+- add tiny role icons above nodes (architect/builder/verifier/repairer)
+- add short-lived directional “message pulse” markers between speaker/listener nodes
+- add family-tree quick view in inspector (parent names/generation lineage)

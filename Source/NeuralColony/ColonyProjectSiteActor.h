@@ -22,10 +22,13 @@ private:
 	USceneComponent* Root;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* SiteMesh;
+	UStaticMeshComponent* SitePad;
 
 	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* ProgressMesh;
+	UStaticMeshComponent* ProgressBar;
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* BuildMass;
 
 	UPROPERTY(VisibleAnywhere)
 	UTextRenderComponent* Label;

@@ -18,11 +18,13 @@ class NEURALCOLONY_API AColonyNodeVisualActor : public AActor
 public:
 	AColonyNodeVisualActor();
 
+	virtual void Tick(float DeltaSeconds) override;
 	void ApplyNodeRecord(const FNodeRecord& NodeRecord);
 	FGuid GetNodeId() const { return NodeId; }
 	FString GetNodeName() const { return NodeName; }
 	void SetConversationText(const FString& ConversationText);
 	void SetSelected(bool bInSelected);
+	void SetDesiredLocation(const FVector& InDesiredLocation);
 
 	UPROPERTY(BlueprintAssignable, Category = "NeuralColony|Presentation")
 	FOnNodeVisualSelected OnNodeSelected;
@@ -36,6 +38,7 @@ private:
 
 	FLinearColor GetStateColor(ENodeLifecycleState State) const;
 	FString GetStateLabel(ENodeLifecycleState State) const;
+	float GetStateScale(ENodeLifecycleState State) const;
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -45,6 +48,9 @@ private:
 	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* BaseRing;
+
+	UPROPERTY(VisibleAnywhere)
 	UTextRenderComponent* Label;
 
 	UPROPERTY(VisibleAnywhere)
@@ -52,4 +58,7 @@ private:
 
 	FGuid NodeId;
 	FString NodeName;
+	ENodeLifecycleState CachedState = ENodeLifecycleState::Idle;
+	FVector DesiredLocation = FVector::ZeroVector;
+	float BubbleTimeRemaining = 0.0f;
 };

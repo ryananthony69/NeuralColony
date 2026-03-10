@@ -1,0 +1,19 @@
+﻿NEXT STEPS
+
+1. Create the Unreal project in this folder if not already done.
+2. Open the project once and save all.
+3. Hand Codex this repo and tell it to read:
+   - Docs/PROJECT_BRIEF.md
+   - Docs/MILESTONES.md
+   - Docs/UI_SPEC.md
+   - Docs/TECH_ARCHITECTURE.md
+   - Docs/SYSTEM_SIMULATION_SPEC.md
+   - AGENTS.md
+   - Docs/CODEX_FIRST_PROMPT.md
+
+4. Tell Codex:
+   - Work only on Milestone 1
+   - No backend integration
+   - No API keys
+   - No internet dependency
+   - Build the simulation-first demonstration layer only

@@ -1,0 +1,21 @@
+﻿# Unreal / Visual Studio generated
+.vs/
+.vscode/
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+
+# Solution / IDE
+*.VC.db
+*.VC.opendb
+*.sln
+*.suo
+*.opensdf
+*.sdf
+
+# Logs / OS
+*.log
+Thumbs.db
+.DS_Store
